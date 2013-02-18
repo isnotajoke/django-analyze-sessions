@@ -44,6 +44,12 @@ class Command(BaseCommand):
 
             self.bigger_than = new_bigger_than
 
+    def get_filtered_queryset(self):
+        """
+        Return a Session qs with any configured filters already applied.
+        """
+        return Session.objects.extra(where=['LENGTH(session_data) > %d' % self.bigger_than])
+
     def get_sessions(self):
         """
         Return sessions that match the configured bigger than parameters.
@@ -51,7 +57,17 @@ class Command(BaseCommand):
         Internally, collect sessions in batches of size batch_size, then yield
         to the caller.
         """
-        return []
+        start = 0
+        while True:
+            qs = self.get_filtered_queryset()
+            if qs.count() == 0:
+                return
+
+            qs = qs[start:start+self.batch_size]
+            start += self.batch_size
+
+            for session in qs:
+                yield session
 
     def process_session(self, session):
         """
