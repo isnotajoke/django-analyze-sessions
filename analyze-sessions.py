@@ -37,6 +37,9 @@ class Command(BaseCommand):
         for session in self.get_sessions():
             self.process_session(session)
 
+        # summarize results and exit
+        self.print_results()
+
     def process_options(self, options):
         """
         Validate options & configure self appropriately based on option
