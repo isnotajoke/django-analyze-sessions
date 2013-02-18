@@ -17,6 +17,8 @@ class Command(BaseCommand):
         self.process_options(**options)
 
         # process sessions
+        for session in self.get_sessions():
+            self.process_session(session)
 
     def process_options(self, options):
         """
@@ -41,3 +43,18 @@ class Command(BaseCommand):
                 raise CommandError('bigger-than must be an integer')
 
             self.bigger_than = new_bigger_than
+
+    def get_sessions(self):
+        """
+        Return sessions that match the configured bigger than parameters.
+
+        Internally, collect sessions in batches of size batch_size, then yield
+        to the caller.
+        """
+        return []
+
+    def process_session(self, session):
+        """
+        Process a session.
+        """
+        pass
