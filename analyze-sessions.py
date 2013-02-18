@@ -15,7 +15,10 @@ class Command(BaseCommand):
     bigger_than = 10 * 1024
 
     # Total # of matching sessions
-    self.session_count = 0
+    self.processed_session_count = 0
+
+    # Total # of sessions in DB
+    self.total_session_count = 0
 
     # Encoded data sizes for the sessions we looked at
     self.sizes = []
@@ -26,6 +29,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # process options.
         self.process_options(**options)
+
+        # Count all sessions
+        self.total_session_count = Session.objects.all().count()
 
         # process sessions
         for session in self.get_sessions():
@@ -86,7 +92,7 @@ class Command(BaseCommand):
         """
         Process a session.
         """
-        self.session_count += 1
+        self.processed_session_count += 1
 
         data = session.session_data
         self.sizes.append(len(data))
