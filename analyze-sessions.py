@@ -100,3 +100,16 @@ class Command(BaseCommand):
         decoded = session.get_decoded()
         for key in decoded:
             self.keys[key] += 1
+
+    def print_results(self):
+        self.stdout.write("Processed %d sessions out of %d "
+                          "total sessions\n" %
+                            (self.processed_session_count,
+                             self.total_session_count))
+
+        average = sum(self.sizes) / float(len(self.sizes))
+        self.stdout.write("Average size was %f bytes\n" % average)
+
+        self.stdout.write("Saw the following keys:\n")
+        for key, count in self.keys.iteritems():
+            self.stdout.write("    %s (%d times)\n" % (key, count))
