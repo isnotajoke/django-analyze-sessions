@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.sessions.models import Session
 
@@ -11,6 +13,15 @@ class Command(BaseCommand):
 
     # Only process sessions with more than this many bytes.
     bigger_than = 10 * 1024
+
+    # Total # of matching sessions
+    self.session_count = 0
+
+    # Encoded data sizes for the sessions we looked at
+    self.sizes = []
+
+    # Observed keys (key => frequency)
+    self.keys = defaultdict(int)
 
     def handle(self, *args, **options):
         # process options.
@@ -75,4 +86,11 @@ class Command(BaseCommand):
         """
         Process a session.
         """
-        pass
+        self.session_count += 1
+
+        data = session.session_data
+        self.sizes.append(len(data))
+
+        decoded = session.get_decoded()
+        for key in decoded:
+            self.keys[key] += 1
