@@ -48,6 +48,8 @@ class Command(BaseCommand):
         """
         Return a Session qs with any configured filters already applied.
         """
+        # XXX: Potentially MySQL-specific. Should be revised to handle
+        #      other DBMS, or fail gracefully when they're in use.
         return Session.objects.extra(where=['LENGTH(session_data) > %d' % self.bigger_than])
 
     def get_sessions(self):
