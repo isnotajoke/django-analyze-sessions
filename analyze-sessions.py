@@ -123,10 +123,10 @@ class Command(BaseCommand):
         else:
             average = 0.0
 
-        self.stdout.write("Average size was %f bytes\n" % average)
+        self.stdout.write("Average size was %.2f bytes\n" % average)
 
         self.stdout.write("Saw the following keys:\n")
         for key, count in self.keys.iteritems():
             avg_size = sum(self.key_sizes[key]) / float(count)
-            self.stdout.write("    %s (%d times, avg. size %f)\n"
+            self.stdout.write("    %s (%d times, avg. size %.2f bytes)\n"
                 % (key, count, avg_size))
