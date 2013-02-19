@@ -107,8 +107,9 @@ class Command(BaseCommand):
         self.sizes.append(len(data))
 
         decoded = session.get_decoded()
-        for key in decoded:
+        for key, value in decoded.iteritems():
             self.keys[key] += 1
+            self.key_sizes[key].append(self.get_size(key, value))
 
     def get_size(self, key, value):
         """
