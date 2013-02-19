@@ -28,6 +28,9 @@ class Command(BaseCommand):
     # Observed keys (key => frequency)
     keys = defaultdict(int)
 
+    # Sizes of observed keys
+    key_sizes = defaultdict(list)
+
     def handle(self, *args, **options):
         # process options.
         self.process_options(options)
