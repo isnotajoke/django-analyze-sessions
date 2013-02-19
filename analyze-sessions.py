@@ -118,7 +118,11 @@ class Command(BaseCommand):
                             (self.processed_session_count,
                              self.total_session_count))
 
-        average = sum(self.sizes) / float(len(self.sizes))
+        if self.sizes:
+            average = sum(self.sizes) / float(len(self.sizes))
+        else:
+            average = 0.0
+
         self.stdout.write("Average size was %f bytes\n" % average)
 
         self.stdout.write("Saw the following keys:\n")
