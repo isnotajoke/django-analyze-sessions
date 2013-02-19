@@ -130,4 +130,6 @@ class Command(BaseCommand):
 
         self.stdout.write("Saw the following keys:\n")
         for key, count in self.keys.iteritems():
-            self.stdout.write("    %s (%d times)\n" % (key, count))
+            avg_size = sum(self.key_sizes[key]) / float(count)
+            self.stdout.write("    %s (%d times, avg. size %f)\n"
+                % (key, count, avg_size))
