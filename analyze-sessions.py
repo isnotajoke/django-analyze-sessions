@@ -7,6 +7,8 @@ class Command(BaseCommand):
     args = '--batch-size=n --bigger-than=n'
     help = 'Analyze Django sessions, summarizing present keys & session size'
 
+    # XXX: Most of these should be set at __init__, not as class-level
+    # constants
     # Number of sessions to process in one batch.
     # Tune as necessary to get DB load at a sweet spot.
     batch_size = 5000
@@ -15,16 +17,16 @@ class Command(BaseCommand):
     bigger_than = 10 * 1024
 
     # Total # of matching sessions
-    self.processed_session_count = 0
+    processed_session_count = 0
 
     # Total # of sessions in DB
-    self.total_session_count = 0
+    total_session_count = 0
 
     # Encoded data sizes for the sessions we looked at
-    self.sizes = []
+    sizes = []
 
     # Observed keys (key => frequency)
-    self.keys = defaultdict(int)
+    keys = defaultdict(int)
 
     def handle(self, *args, **options):
         # process options.
