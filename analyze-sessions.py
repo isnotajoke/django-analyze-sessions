@@ -24,24 +24,13 @@ class Command(BaseCommand):
             help="Process sessions in batches no larger than BATCH_SIZE")
     )
 
-    # XXX: Most of these should be set at __init__, not as class-level
-    # constants
-    # Total # of matching sessions
-    processed_session_count = 0
-
-    # Total # of sessions in DB
-    total_session_count = 0
-
-    # Encoded data sizes for the sessions we looked at
-    sizes = []
-
-    # Observed keys (key => frequency)
-    keys = defaultdict(int)
-
-    # Sizes of observed keys
-    key_sizes = defaultdict(list)
-
     def handle(self, *args, **options):
+        self.processed_session_count = 0
+        self.total_session_count     = 0
+        self.session_sizes           = []
+        self.session_keys            = defaultdict(int)
+        self.session_key_sizes       = defaultdict(list)
+
         # process options.
         self.process_options(options)
 
@@ -97,12 +86,12 @@ class Command(BaseCommand):
         self.processed_session_count += 1
 
         data = session.session_data
-        self.sizes.append(len(data))
+        self.session_sizes.append(len(data))
 
         decoded = session.get_decoded()
         for key, value in decoded.iteritems():
-            self.keys[key] += 1
-            self.key_sizes[key].append(self.get_size(key, value))
+            self.session_keys[key] += 1
+            self.session_key_sizes[key].append(self.get_size(key, value))
 
     def get_size(self, key, value):
         """
@@ -118,15 +107,15 @@ class Command(BaseCommand):
                             (self.processed_session_count,
                              self.total_session_count))
 
-        if self.sizes:
-            average = sum(self.sizes) / float(len(self.sizes))
+        if self.session_sizes:
+            average = sum(self.session_sizes) / float(len(self.session_sizes))
         else:
             average = 0.0
 
         self.stdout.write("Average size was %.2f bytes\n" % average)
 
         self.stdout.write("Saw the following keys:\n")
-        for key, count in self.keys.iteritems():
-            avg_size = sum(self.key_sizes[key]) / float(count)
+        for key, count in self.session_keys.iteritems():
+            avg_size = sum(self.session_key_sizes[key]) / float(count)
             self.stdout.write("    %s (%d times, avg. size %.2f bytes)\n"
                 % (key, count, avg_size))
