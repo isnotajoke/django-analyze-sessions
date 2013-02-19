@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # process options.
-        self.process_options(**options)
+        self.process_options(options)
 
         # Count all sessions
         self.total_session_count = Session.objects.all().count()
