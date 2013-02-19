@@ -2,6 +2,7 @@ from collections import defaultdict
 
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.sessions.models import Session
+from django.contrib.sessions.backends.base import SessionBase
 
 class Command(BaseCommand):
     args = '--batch-size=n --bigger-than=n'
@@ -108,6 +109,14 @@ class Command(BaseCommand):
         decoded = session.get_decoded()
         for key in decoded:
             self.keys[key] += 1
+
+    def get_size(self, key, value):
+        """
+        Serialize an object hierarchy & return the size of the result.
+        """
+        d = {key: value}
+        d_enc = SessionBase().encode(d)
+        return len(d_enc)
 
     def print_results(self):
         self.stdout.write("Processed %d sessions out of %d "
