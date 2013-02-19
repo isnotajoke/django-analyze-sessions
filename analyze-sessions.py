@@ -84,7 +84,7 @@ class Command(BaseCommand):
         start = 0
         while True:
             qs = self.get_filtered_queryset()
-            if qs.count() == 0:
+            if qs.count() == 0 or start >= qs.count():
                 return
 
             qs = qs[start:start+self.batch_size]
