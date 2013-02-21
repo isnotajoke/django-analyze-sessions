@@ -29,7 +29,12 @@ class Command(BaseCommand):
             dest='sleep_time',
             type='float',
             default=2.0,
-            help="# of seconds to sleep in between batches")
+            help="# of seconds to sleep in between batches"),
+        make_option("--ids-from",
+            action='store',
+            dest='from_file',
+            default=None,
+            help="Take session_keys from IDS_FROM instead of dynamically generating them with --bigger-than")
     )
 
     def handle(self, *args, **options):
