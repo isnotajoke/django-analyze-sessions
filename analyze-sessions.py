@@ -95,7 +95,7 @@ class Command(BaseCommand):
                 yield session
 
             if self.verbose:
-                self.stdout.write("sleeping for %.2f seconds before next batch\n")
+                self.stdout.write("sleeping for %.2f seconds before next batch\n" % self.sleep_time)
 
             time.sleep(self.sleep_time)
 
