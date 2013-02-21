@@ -58,16 +58,18 @@ class Command(BaseCommand):
         self.sleep_time  = options['sleep_time']
         self.verbose     = ('verbosity' in options and options['verbosity'] > 1)
 
+        self.file_mode = False
+        if options['ids_from'] is not None:
+            self.file_mode = True
+            self.from_file = options['ids_from']
+
         if self.verbose:
             self.stdout.write("analyze-sessions ready\n")
             self.stdout.write("batch size: %d\n" % (self.batch_size))
             self.stdout.write("bigger than: %d\n" % (self.bigger_than))
             self.stdout.write("sleep time: %.2f\n" % (self.sleep_time))
-
-        self.file_mode = False
-        if options['ids_from'] is not None:
-            self.file_mode = True
-            self.from_file = options['ids_from']
+            if self.file_mode:
+                self.stdout.write("operating in file mode\n")
 
     def get_filtered_queryset(self):
         """
@@ -77,13 +79,35 @@ class Command(BaseCommand):
         #      other DBMS, or fail gracefully when they're in use.
         return Session.objects.extra(where=['LENGTH(session_data) > %d' % self.bigger_than])
 
+    def read_ids_from_file(self):
+        try:
+            f = open(self.from_file, 'r')
+        except IOError, e:
+            raise CommandError("failed to open input file %s" % self.from_file)
+
+        ids = f.readlines()
+        f.close()
+
+        ids = map(lambda x: x.strip(), ids)
+
+        self.keys_to_check = ids
+
     def get_sessions(self):
+        if self.file_mode:
+            return self.get_sessions_file()
+
+        return self.get_sessions_db()
+
+    def get_sessions_db(self):
         """
         Return sessions that match the configured bigger than parameters.
 
         Internally, collect sessions in batches of size batch_size, then yield
         to the caller.
         """
+        if self.verbose:
+            self.stdout.write("getting sessions dynamically from DB\n")
+
         start = 0
         while True:
             qs = self.get_filtered_queryset()
@@ -107,6 +131,16 @@ class Command(BaseCommand):
                 self.stdout.write("sleeping for %.2f seconds before next batch\n" % self.sleep_time)
 
             time.sleep(self.sleep_time)
+
+    def get_sessions_file(self):
+        if self.verbose:
+            self.stdout.write("getting sessions from input file\n")
+
+        self.read_ids_from_file()
+
+        for key in self.keys_to_check:
+            s = Session.objects.get(session_key=key)
+            yield s
 
     def process_session(self, session):
         self.processed_session_count += 1
