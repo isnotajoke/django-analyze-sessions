@@ -4,7 +4,7 @@ from collections import defaultdict
 from optparse import make_option
 
 from django.core.management.base import BaseCommand, CommandError
-from django.contrib.sessions.models import Session
+from django.contrib.sessions.models import Session, DoesNotExist
 from django.contrib.sessions.backends.base import SessionBase
 
 class Command(BaseCommand):
@@ -139,8 +139,11 @@ class Command(BaseCommand):
         self.read_ids_from_file()
 
         for key in self.keys_to_check:
-            s = Session.objects.get(session_key=key)
-            yield s
+            try:
+                s = Session.objects.get(session_key=key)
+                yield s
+            except DoesNotExist:
+                self.stderr.write("warning: session %s no longer exists. skipping.\n" % key)
 
     def process_session(self, session):
         self.processed_session_count += 1
