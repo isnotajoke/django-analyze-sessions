@@ -64,6 +64,11 @@ class Command(BaseCommand):
             self.stdout.write("bigger than: %d\n" % (self.bigger_than))
             self.stdout.write("sleep time: %.2f\n" % (self.sleep_time))
 
+        self.file_mode = False
+        if options['ids_from'] is not None:
+            self.file_mode = True
+            self.from_file = options['ids_from']
+
     def get_filtered_queryset(self):
         """
         Return a Session qs with any configured filters already applied.
