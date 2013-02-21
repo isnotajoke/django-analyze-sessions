@@ -54,6 +54,12 @@ class Command(BaseCommand):
         self.sleep_time  = options['sleep_time']
         self.verbose     = ('verbosity' in options and options['verbosity'] > 1)
 
+        if self.verbose:
+            self.stdout.write("analyze-sessions ready\n")
+            self.stdout.write("batch size: %d\n" % (self.batch_size))
+            self.stdout.write("bigger than: %d\n" % (self.bigger_than))
+            self.stdout.write("sleep time: %.2f\n" % (self.sleep_time))
+
     def get_filtered_queryset(self):
         """
         Return a Session qs with any configured filters already applied.
@@ -73,13 +79,23 @@ class Command(BaseCommand):
         while True:
             qs = self.get_filtered_queryset()
             if qs.count() == 0 or start >= qs.count():
+
+                if self.verbose:
+                    self.stdout.write("no matching records, exiting\n")
+
                 return
+
+            if self.verbose:
+                self.stdout.write("getting records from %d to %d\n" % (start, start+self.batch_size))
 
             qs = qs[start:start+self.batch_size]
             start += self.batch_size
 
             for session in qs:
                 yield session
+
+            if self.verbose:
+                self.stdout.write("sleeping for %.2f seconds before next batch\n")
 
             time.sleep(self.sleep_time)
 
