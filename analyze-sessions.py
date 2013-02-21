@@ -8,7 +8,6 @@ from django.contrib.sessions.models import Session
 from django.contrib.sessions.backends.base import SessionBase
 
 class Command(BaseCommand):
-    args = '--batch-size=n --bigger-than=n'
     help = "Analyze Django sessions, summarizing present keys & session size"
 
     option_list = BaseCommand.option_list + (
