@@ -1,3 +1,5 @@
+import time
+
 from collections import defaultdict
 from optparse import make_option
 
@@ -77,6 +79,8 @@ class Command(BaseCommand):
 
             for session in qs:
                 yield session
+
+            time.sleep(self.sleep_time)
 
     def process_session(self, session):
         self.processed_session_count += 1
