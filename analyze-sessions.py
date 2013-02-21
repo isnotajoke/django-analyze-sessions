@@ -7,7 +7,7 @@ from django.contrib.sessions.backends.base import SessionBase
 
 class Command(BaseCommand):
     args = '--batch-size=n --bigger-than=n'
-    help = 'Analyze Django sessions, summarizing present keys & session size'
+    help = "Analyze Django sessions, summarizing present keys & session size"
 
     option_list = BaseCommand.option_list + (
         make_option("--bigger-than",
@@ -31,24 +31,16 @@ class Command(BaseCommand):
         self.session_keys            = defaultdict(int)
         self.session_key_sizes       = defaultdict(list)
 
-        # process options.
         self.process_options(options)
 
-        # Count all sessions
         self.total_session_count = Session.objects.all().count()
 
-        # process sessions
         for session in self.get_sessions():
             self.process_session(session)
 
-        # summarize results and exit
         self.print_results()
 
     def process_options(self, options):
-        """
-        Validate options & configure self appropriately based on option
-        settings
-        """
         self.batch_size = options['batch_size']
         self.bigger_than = options['bigger_than']
 
@@ -80,9 +72,6 @@ class Command(BaseCommand):
                 yield session
 
     def process_session(self, session):
-        """
-        Process a session.
-        """
         self.processed_session_count += 1
 
         data = session.session_data
