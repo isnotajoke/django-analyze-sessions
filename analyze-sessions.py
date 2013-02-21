@@ -4,7 +4,7 @@ from collections import defaultdict
 from optparse import make_option
 
 from django.core.management.base import BaseCommand, CommandError
-from django.contrib.sessions.models import Session, DoesNotExist
+from django.contrib.sessions.models import Session
 from django.contrib.sessions.backends.base import SessionBase
 
 class Command(BaseCommand):
@@ -142,7 +142,7 @@ class Command(BaseCommand):
             try:
                 s = Session.objects.get(session_key=key)
                 yield s
-            except DoesNotExist:
+            except Session.DoesNotExist:
                 self.stderr.write("warning: session %s no longer exists. skipping.\n" % key)
 
     def process_session(self, session):
