@@ -59,9 +59,9 @@ class Command(BaseCommand):
         self.verbose     = ('verbosity' in options and options['verbosity'] > 1)
 
         self.file_mode = False
-        if options['ids_from'] is not None:
+        if options['from_file'] is not None:
             self.file_mode = True
-            self.from_file = options['ids_from']
+            self.from_file = options['from_file']
 
         if self.verbose:
             self.stdout.write("analyze-sessions ready\n")
