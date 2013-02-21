@@ -21,7 +21,13 @@ class Command(BaseCommand):
             dest='batch_size',
             type='int',
             default=5000,
-            help="Process sessions in batches no larger than BATCH_SIZE")
+            help="Process sessions in batches no larger than BATCH_SIZE"),
+        make_option("--sleep-time",
+            action='store',
+            dest='sleep_time',
+            type='float',
+            default=2.0,
+            help="# of seconds to sleep in between batches")
     )
 
     def handle(self, *args, **options):
@@ -43,6 +49,7 @@ class Command(BaseCommand):
     def process_options(self, options):
         self.batch_size = options['batch_size']
         self.bigger_than = options['bigger_than']
+        self.sleep_time = options['sleep_time']
 
     def get_filtered_queryset(self):
         """
