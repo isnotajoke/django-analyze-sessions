@@ -116,12 +116,6 @@ class Command(BaseCommand):
         start = 0
         while True:
             qs = self.get_filtered_queryset()
-            if qs.count() == 0 or start >= qs.count():
-
-                if self.verbose:
-                    self.stdout.write("no matching records, exiting\n")
-
-                return
 
             if self.verbose:
                 self.stdout.write("getting records from %d to %d\n" % (start, start+self.batch_size))
@@ -129,8 +123,16 @@ class Command(BaseCommand):
             qs = qs[start:start+self.batch_size]
             start += self.batch_size
 
+            processed_count = 0
             for session in qs:
+                processed_count += 1
                 yield session
+
+            if processed_count == 0:
+                if self.verbose:
+                    self.stdout.write("no more records, exiting\n")
+
+                return
 
             if self.verbose:
                 self.stdout.write("sleeping for %.2f seconds before next batch\n" % self.sleep_time)
