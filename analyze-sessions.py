@@ -184,7 +184,14 @@ class Command(BaseCommand):
         self.stdout.write("Average size was %.2f bytes\n" % average)
 
         self.stdout.write("Saw the following keys:\n")
-        for key, count in self.session_keys.iteritems():
+
+        # Iterate over keys in order of total size (descending), so keys
+        # that take up the most space are at the top.
+        sorted_items = sorted(self.session_key_totals.items(),
+                              cmp=lambda x, y: cmp(x[1], y[1]),
+                              reverse=True)
+        for key, total in sorted_items:
+            count = self.session_keys[key]
             avg_size = sum(self.session_key_sizes[key]) / float(count)
             self.stdout.write("    %s (%d times, avg. size %.2f bytes)\n"
                 % (key, count, avg_size))
