@@ -60,7 +60,8 @@ class Command(BaseCommand):
         self.batch_size  = options['batch_size']
         self.bigger_than = options['bigger_than']
         self.sleep_time  = options['sleep_time']
-        self.verbose     = ('verbosity' in options and options['verbosity'] > 1)
+        self.verbose     = ('verbosity' in options and
+                            int(options['verbosity']) > 1)
 
         self.file_mode = False
         if options['from_file'] is not None:
