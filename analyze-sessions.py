@@ -40,8 +40,12 @@ class Command(BaseCommand):
         self.processed_session_count = 0
         self.total_session_count     = 0
         self.session_sizes           = []
+        # session_key => count
         self.session_keys            = defaultdict(int)
+        # session_key => [size, size, ...]
         self.session_key_sizes       = defaultdict(list)
+        # session_key => total_size
+        self.session_key_totals      = defaultdict(int)
 
         self.process_options(options)
 
