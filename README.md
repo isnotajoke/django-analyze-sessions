@@ -6,6 +6,14 @@ that analyzes and reports on the size of sessions in the DB. It is
 intended to make it easier to understand how much space session data
 takes up.
 
+## Why?
+
+I noticed that a relatively small number of sessions in my Django app
+were consuming 50+KiB of data each, and wanted to understand why.
+It isn't feasible or appealing to analyze large numbers of Django
+sessions by hand, and I couldn't find any existing tools that did batch
+analysis, so I wrote this tool.
+
 ## Installation
 
 First, choose an app within your Django environment to host the new
@@ -23,7 +31,7 @@ You can then run django-admin.py and confirm that the command shows up.
 
 ## Example Uses
 
-Break down the space usage of all sessions with more than 500KB of
+Break down the space usage of all sessions with more than 15KB of
 session data:
 
 ```
