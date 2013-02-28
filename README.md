@@ -59,21 +59,11 @@ Saw the following keys:
 
 ## Known Issues and Bugs
 
-  * If your session table is quite large, queries that select on session
-    size may not perform well (i.e., they may take a long time).
-    Depending on your DBMS, this can mean locking the django_session
-    table for 45-60 seconds or more, which can impact end users on your
-    site. If you have a big session table, you're encouraged to test the
-    tool on a backup table first and confirm that it executes in a
-    reasonable amount of time (or devise a list of session keys, then
-    feed those to the tool using the --ids-from option).
   * The custom WHERE clause used to filter on session size may only work
     on MySQL (I don't have access to a Django installation on another
     DBMS, so I can't vouch for how well it'll work there).
-  * The QuerySet slicing currently used to implement batching is
-    probably not very efficient on the DBMS side of things, since
-    QuerySet slicing gets translated to OFFSET ... LIMIT. A future
-    version of the tool may try to be better about this.
+  * The tool could stand to be smarter about size abbreviations (e.g.,
+    by learning how to interpret 100KB, or abbreviating output)
 
 ## Author
 
