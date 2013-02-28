@@ -76,14 +76,17 @@ class Command(BaseCommand):
             if self.file_mode:
                 self.stdout.write("operating in file mode\n")
 
-    def get_filtered_queryset(self, expire_after=None):
+    def get_filtered_queryset(self, expire_after=None, ignore_keys=None):
         """
         Return a Session qs with any configured filters already applied.
         """
         qs = Session.objects
 
         if expire_after is not None:
-            qs = qs.filter(expire_date__gt=expire_after)
+            # handle boundary conditions with identical expire_dates.
+            qs = qs.filter(expire_date__gte=expire_after)
+            for ikey in ignore_keys:
+                qs = qs.exclude(session_key=ikey)
 
         # XXX: Potentially MySQL-specific. Should be revised to handle
         #      other DBMS, or fail gracefully when they're in use.
