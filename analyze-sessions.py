@@ -122,16 +122,11 @@ class Command(BaseCommand):
         if self.verbose:
             self.stdout.write("getting sessions dynamically from DB\n")
 
-        start = 0
         max_processed_date = None
         while True:
             qs = self.get_filtered_queryset(max_processed_date)
 
-            if self.verbose:
-                self.stdout.write("getting records from %d to %d\n" % (start, start+self.batch_size))
-
-            qs = qs[start:start+self.batch_size]
-            start += self.batch_size
+            qs = qs[:self.batch_size]
 
             processed_count = 0
             for session in qs:
