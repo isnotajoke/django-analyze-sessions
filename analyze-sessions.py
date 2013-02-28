@@ -125,9 +125,13 @@ class Command(BaseCommand):
         if self.verbose:
             self.stdout.write("getting sessions dynamically from DB\n")
 
+        # largest expire_date we've seen so far
         max_processed_date = None
+        # session_keys for sessions with this expire_date that we've already
+        # processed.
+        max_processed_keys = []
         while True:
-            qs = self.get_filtered_queryset(max_processed_date)
+            qs = self.get_filtered_queryset(max_processed_date, max_processed_keys)
 
             qs = qs[:self.batch_size]
 
@@ -137,6 +141,9 @@ class Command(BaseCommand):
 
                 if max_processed_date is None or session.expire_date > max_processed_date:
                     max_processed_date = session.expire_date
+                    max_processed_keys = []
+                if session.expire_date == max_processed_date:
+                    max_processed_keys.append(session.session_key)
 
                 yield session
 
