@@ -76,13 +76,22 @@ class Command(BaseCommand):
             if self.file_mode:
                 self.stdout.write("operating in file mode\n")
 
-    def get_filtered_queryset(self):
+    def get_filtered_queryset(self, expire_after=None):
         """
         Return a Session qs with any configured filters already applied.
         """
+        qs = Session.objects
+
+        if expire_after is not None:
+            qs = qs.filter(expire_date__gt=expire_after)
+
         # XXX: Potentially MySQL-specific. Should be revised to handle
         #      other DBMS, or fail gracefully when they're in use.
-        return Session.objects.extra(where=['LENGTH(session_data) > %d' % self.bigger_than])
+        qs = qs.extra(where=['LENGTH(session_data) > %d' % self.bigger_than])
+
+        qs = qs.order_by('expire_date')
+
+        return qs
 
     def read_ids_from_file(self):
         try:
