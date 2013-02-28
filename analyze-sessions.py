@@ -123,8 +123,9 @@ class Command(BaseCommand):
             self.stdout.write("getting sessions dynamically from DB\n")
 
         start = 0
+        max_processed_date = None
         while True:
-            qs = self.get_filtered_queryset()
+            qs = self.get_filtered_queryset(max_processed_date)
 
             if self.verbose:
                 self.stdout.write("getting records from %d to %d\n" % (start, start+self.batch_size))
@@ -135,6 +136,10 @@ class Command(BaseCommand):
             processed_count = 0
             for session in qs:
                 processed_count += 1
+
+                if max_processed_date is None or session.expire_date > max_processed_date:
+                    max_processed_date = session.expire_date
+
                 yield session
 
             if processed_count == 0:
