@@ -63,11 +63,9 @@ Saw the following keys:
     on MySQL (I don't have access to a Django installation on another
     DBMS, so I can't vouch for how well it'll work there).
   * The QuerySet slicing currently used to implement batching is
-    probably not very efficient on the DBMS side of things. A future
-    version of this tool may switch to a lower-level PK-based slicing
-    scheme, which should reduce the execution time & memory footprint on
-    the DBMS and maintain the small memory footprint in the tool at the
-    expense of implementation complexity.
+    probably not very efficient on the DBMS side of things, since
+    QuerySet slicing gets translated to OFFSET ... LIMIT. A future
+    version of the tool may try to be better about this.
 
 ## Author
 
