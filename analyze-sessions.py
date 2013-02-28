@@ -105,9 +105,7 @@ class Command(BaseCommand):
         ids = f.readlines()
         f.close()
 
-        ids = map(lambda x: x.strip(), ids)
-
-        self.keys_to_check = ids
+        return map(lambda x: x.strip(), ids)
 
     def get_sessions(self):
         if self.file_mode:
@@ -162,9 +160,9 @@ class Command(BaseCommand):
         if self.verbose:
             self.stdout.write("getting sessions from input file\n")
 
-        self.read_ids_from_file()
+        keys = self.read_ids_from_file()
 
-        for key in self.keys_to_check:
+        for key in keys:
             try:
                 s = Session.objects.get(session_key=key)
                 yield s
