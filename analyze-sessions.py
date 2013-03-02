@@ -113,12 +113,6 @@ class Command(BaseCommand):
         return self.get_sessions_db()
 
     def get_sessions_db(self):
-        """
-        Return sessions that match the configured bigger than parameters.
-
-        Internally, collect sessions in batches of size batch_size, then yield
-        to the caller.
-        """
         if self.verbose:
             self.stdout.write("getting sessions dynamically from DB\n")
 
