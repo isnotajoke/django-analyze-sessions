@@ -39,8 +39,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.processed_session_count = 0
         self.total_session_count     = 0
+        # [session_size, session_size, ...]
+        # accumulated throughout run, then averaged at the end
         self.session_sizes           = []
-        # session_key => count
+        # session_key => # of sessions with session_key
         self.session_keys            = defaultdict(int)
         # session_key => [size, size, ...]
         self.session_key_sizes       = defaultdict(list)
@@ -77,9 +79,6 @@ class Command(BaseCommand):
                 self.stdout.write("operating in file mode\n")
 
     def get_filtered_queryset(self, expire_after=None, ignore_keys=None):
-        """
-        Return a Session qs with any configured filters already applied.
-        """
         qs = Session.objects
 
         if expire_after is not None:
