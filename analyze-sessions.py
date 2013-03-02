@@ -93,7 +93,7 @@ class Command(BaseCommand):
 
         qs = qs.order_by('expire_date')
 
-        return qs
+        return qs[:self.batch_size]
 
     def read_ids_from_file(self):
         try:
@@ -129,8 +129,6 @@ class Command(BaseCommand):
         max_processed_keys = []
         while True:
             qs = self.get_filtered_queryset(max_processed_date, max_processed_keys)
-
-            qs = qs[:self.batch_size]
 
             processed_count = 0
             for session in qs:
