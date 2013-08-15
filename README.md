@@ -16,18 +16,32 @@ analysis, so I wrote this tool.
 
 ## Installation
 
-First, choose an app within your Django environment to host the new
-command. Note that the app must be in the INSTALLED_APPS tuple in your
-settings file. Then:
+Install commands.py somewhere in your project's path.
+
+If you have an existing app that you want to install a session analysis
+command in, you can start by creating the right directory hierarchy for
+management commands:
 
 ```
 mkdir -p /path/to/your/app/management/commands
 touch /path/to/your/app/management/__init__.py
 touch /path/to/your/app/management/commands/__init__.py
-cp /path/to/analyze-sessions.py /path/to/your/app/management/commands/analyze-sessions.py
 ```
 
-You can then run django-admin.py and confirm that the command shows up.
+Otherwise, you'll need to create a new app, create the management
+commands directory hierarchy within that app, and add the app to
+INSTALLED_APPS.
+
+Next, you'll create a file called analyze-sessions.py at
+```/path/to/your/app/management/commands/analyze-sessions.py```. The
+file should look like this:
+
+```
+from path.to.commands import AnalyzeSessionsCommand as Command
+```
+
+That's it. You can now run django-admin.py and confirm that the command
+shows up.
 
 ## Example Uses
 
@@ -65,6 +79,7 @@ Saw the following keys:
     DBMS, so I can't vouch for how well it'll work there).
   * The tool could stand to be smarter about size abbreviations (e.g.,
     by learning how to interpret 100KB, or abbreviating output)
+  * The packaging (such as it is) isn't very good.
 
 ## License
 
