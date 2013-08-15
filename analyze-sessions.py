@@ -1,3 +1,11 @@
+"""
+Django command to analyze sessions & print out statistics.
+
+See https://github.com/isnotajoke/django-analyze-sessions
+
+author: Kevan Carstensen <kevan@isnotajoke.com>
+"""
+
 import time
 
 from collections import defaultdict
@@ -7,7 +15,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.contrib.sessions.models import Session
 from django.contrib.sessions.backends.base import SessionBase
 
-class Command(BaseCommand):
+class AnalyzeSessionsCommand(BaseCommand):
     help = "Analyze Django sessions, summarizing present keys & session size"
 
     option_list = BaseCommand.option_list + (
