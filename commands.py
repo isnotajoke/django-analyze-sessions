@@ -1,5 +1,5 @@
 """
-Django command to analyze sessions & print out statistics.
+Django commands to analyze sessions & print out statistics.
 
 See https://github.com/isnotajoke/django-analyze-sessions
 
