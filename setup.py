@@ -9,7 +9,7 @@ setup(
     url='https://github.com/isnotajoke/django-analyze-sessions',
     license='LICENSE.txt',
     description='Tools to analyze Django DB sessions',
-    long_description=open('README.md').read(),
+    long_description=open('README.rst').read(),
     install_requires=[
         "Django >= 1.3.0",
     ],
