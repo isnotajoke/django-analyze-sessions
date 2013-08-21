@@ -6,7 +6,7 @@ setup(
     author='Kevan Carstensen',
     author_email='kevan@isnotajoke.com',
     packages=['analyze_sessions', 'analyze_sessions.management', 'analyze_sessions.management.commands'],
-    url='http://isnotajoke.com',
+    url='https://github.com/isnotajoke/django-analyze-sessions',
     license='LICENSE.txt',
     description='Tools to analyze Django DB sessions',
     long_description=open('README.md').read(),
