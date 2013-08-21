@@ -1,11 +1,11 @@
 from distutils.core import setup
 
 setup(
-    name='django-analyze-sesions',
+    name='django-analyze-sessions',
     version='0.1',
     author='Kevan Carstensen',
     author_email='kevan@isnotajoke.com',
-    packages=['analyze_sessions'],
+    packages=['analyze_sessions', 'analyze_sessions.management', 'analyze_sessions.management.commands'],
     url='http://isnotajoke.com',
     license='LICENSE.txt',
     description='Tools to analyze Django DB sessions',
