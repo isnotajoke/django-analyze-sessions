@@ -1,1 +1,3 @@
+v0.1.1, 2013-08-21 -- Fix packaging problems
+
 v0.1, 2013-08-21 -- Initial Release
