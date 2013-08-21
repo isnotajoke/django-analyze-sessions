@@ -7,7 +7,7 @@ setup(
     author_email='kevan@isnotajoke.com',
     packages=['analyze_sessions', 'analyze_sessions.management', 'analyze_sessions.management.commands'],
     url='https://github.com/isnotajoke/django-analyze-sessions',
-    license='LICENSE.txt',
+    license='MIT',
     description='Tools to analyze Django DB sessions',
     long_description=open('README.rst').read(),
     install_requires=[
